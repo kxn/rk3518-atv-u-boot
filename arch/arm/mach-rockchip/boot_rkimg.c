@@ -349,6 +349,12 @@ void setup_download_mode(void)
 		}
 	} else if (is_hotkey(HK_FASTBOOT)) {
 		env_set("reboot_mode", "fastboot");
+	} else if (IS_ENABLED(CONFIG_ROCKCHIP_RK3528) &&
+		   IS_ENABLED(CONFIG_CMD_ROCKUSB) &&
+		   rockchip_u2phy_vbus_detect() > 0) {
+		/* An A-to-A cable to a PC is an SDP/CDP USB connection. */
+		printf("PC USB connected, entering rockusb download mode...\n");
+		run_command("download", 0);
 	}
 }
 
